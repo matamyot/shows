@@ -1,0 +1,46 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block menu_shows %}active{% endblock %}
+
+{% block contents %}
+    <section>
+    	<div class="container">
+            <div class="col-xs-2">
+                <img class="pull-left" style="width:80%;margin:15px" src="{{ web_image('uploads/'~show.image).resize(200, 300).png }}" />
+            </div>
+            <div class="col-xs-10">
+    		<h3>{{ show }} </h3>
+                {{ show.synopsis }}
+                {% for season in show.seasons %}
+                {# ************************************************ #}
+                {# Question 2 : Ajout du bouton de supp d'une saison #}
+                {# Appel le constructeur de lien :genere le lien vers la route du controller avec l'id comme parametre #}
+                {# ________________________________________________ #}
+                    <h4>Saison {{ season }} <a href="{{ path('admin_delete_season', {id: season.id}) }}" class="alert-danger">Supprimer</a></h4>
+                    {% for episode in season.episodes %}
+                    {# ********************************************** #}
+                    {# Question 1 : Mettre l'objet Date en format PHP #}
+                    {# ______________________________________________ #}
+                        {{ episode.number }} - {{ episode }}  <i>(Sorti le {{ episode.date|date("Y-m-d") }})</i>
+                        {% if app.user %}
+                            <a href="{{ path('admin_delete_episode', {id: episode.id}) }}" class="alert-danger">Supprimer</a>
+                        {% endif %}
+                        <br />
+                    {% endfor %}
+                    {% if app.user %}
+                        <a class="alert-success" href="{{ path('admin_add_episode', {id: season.id}) }}">Ajouter un épisode</a>
+                    {% endif %}
+                {% else %}
+                <div class="alert alert-danger">
+                    Aucune saison pour cette série
+                </div>
+                {% endfor %}
+                {% if app.user %}
+                <p>
+                    <a class="alert-success" href="{{ path('admin_add_season', {id: show.id}) }}">Ajouter une saison</a>
+                </p>
+                {% endif %}
+        </div>
+    	</div>
+    </section>
+{% endblock %}

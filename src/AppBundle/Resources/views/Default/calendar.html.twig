@@ -1,0 +1,20 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block menu_calendar %}active{% endblock %}
+
+{% block contents %}
+    <section>
+    	<div class="container">
+    		{% for episode in episodes %}
+                {# ************************************************************* #}
+                {# Question 5 : Affichage avec calendarAction + findByComingNext #}
+                {# _____________________________________________________________ #}
+                {{ episode.number }} - {{ episode }}  <i>(Sorti le {{ episode.date|date("Y-m-d") }})</i>
+                {% if app.user %}
+                <a href="{{ path('admin_delete_episode', {id: episode.id}) }}" class="alert-danger">Supprimer</a>
+                {% endif %}
+                <br />
+            {% endfor %}
+    	</div>
+    </section>
+{% endblock %}
